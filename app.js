@@ -25,7 +25,7 @@ app.use(cors());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.all(/.*/, (req, res, nxt)=>{
-    nxt(new ApiErorr(`Can't find this route: ${req.originalUrl}`, 400));
+    nxt(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
 });
 
 //global error handling middleware
