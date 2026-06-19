@@ -23,12 +23,7 @@ export const authMiddleware = asyncHandler(async (req, res, nxt) => {
 export const authorizeRoles = (...roles) => {
     return (req, res, nxt) => {
         if (!req.user || !roles.includes(req.user.role)) {
-            return nxt(
-                new ApiError(
-                    "You do not have permission to access this resource",
-                    403
-                )
-            );
+            return nxt(new ApiError("You do not have permission to access this resource",403));
         }
 
         nxt();

@@ -94,9 +94,9 @@ Create a `.env` file in the project root:
 ```
 PORT=5000
 
-MONGO_URI=mongodb://asamy0879_db_user:ahmed2016@ac-91ppiv3-shard-00-00.kk2mmul.mongodb.net:27017,ac-91ppiv3-shard-00-01.kk2mmul.mongodb.net:27017,ac-91ppiv3-shard-00-02.kk2mmul.mongodb.net:27017/?ssl=true&replicaSet=atlas-137ztp-shard-0&authSource=admin&appName=Cluster0
+DB_url=mongodb://asamy0879_db_user:ahmed2016@ac-91ppiv3-shard-00-00.kk2mmul.mongodb.net:27017,ac-91ppiv3-shard-00-01.kk2mmul.mongodb.net:27017,ac-91ppiv3-shard-00-02.kk2mmul.mongodb.net:27017/?ssl=true&replicaSet=atlas-137ztp-shard-0&authSource=admin&appName=Cluster0
 
-JWT_SECRET=your_jwt_secret_here
+jwt_key=your_jwt_secret_here
 ```
 
 ### **3. Run in development mode**
