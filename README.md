@@ -1,202 +1,144 @@
-# **Personal Blogging Platform - وثائق واجهة برمجة التطبيقات (API Documentation)**
+# **Personal Blogging Platform - API Documentation**
 
-## **🎯 نظرة عامة**
-**Personal Blogging Platform** هو نظام Backend مبني بـ **Node.js** و **Express** و **MongoDB**، مصمم لإدارة منصة تدوين شخصية. يوفر النظام نظام مصادقة كامل (تسجيل، دخول، صلاحيات) بالإضافة إلى إدارة كاملة للمقالات (إنشاء، تعديل، حذف، عرض) مع نظام تحكم في الصلاحيات حسب دور المستخدم.
+## **🎯 Overview**
+**Personal Blogging Platform** is a backend system built with **Node.js**, **Express**, and **MongoDB**, designed to power a personal blogging platform. It provides a complete authentication system (register, login, role-based access) along with full post management (create, update, delete, view), controlled by a role-based authorization system.
 
-### **🔗 الأساسيات**
-- **Base URL:** `http://localhost:3000/api`
+### **🔗 Basics**
+- **Base URL:** `http://localhost:5000/api/v1`
 - **Schema:** RESTful API
 - **Authentication:** Bearer Token (JWT)
 - **Database:** MongoDB (Mongoose)
 - **Response Format:** JSON
+- **Postman Docs:** [View full API documentation](https://documenter.getpostman.com/view/42740215/2sBXwvHoCt)
 
 ---
 
-## **🛠️ التقنيات المستخدمة**
-| التقنية | الاستخدام |
-|---------|-----------|
-| Express 5 | بناء السيرفر والـ Routing |
-| Mongoose / MongoDB | قاعدة البيانات وتعريف الـ Models |
-| jsonwebtoken | إنشاء والتحقق من التوكنات (JWT) |
-| express-validator | التحقق من صحة المدخلات (Validation) |
-| express-async-handler | التعامل مع الأخطاء في الدوال غير المتزامنة |
-| helmet | حماية الـ HTTP Headers |
-| cors | التحكم في الوصول من مصادر مختلفة |
-| multer | رفع الملفات (الصور مثلاً) |
-| slugify | توليد slugs للمقالات |
-| nodemon | إعادة تشغيل السيرفر تلقائياً أثناء التطوير |
+## **🛠️ Tech Stack**
+| Technology | Purpose |
+|------------|---------|
+| Express 5 | Server and routing |
+| Mongoose / MongoDB | Database and schema modeling |
+| jsonwebtoken | Creating and verifying JWTs |
+| express-validator | Input validation |
+| express-async-handler | Error handling in async functions |
+| helmet | Securing HTTP headers |
+| cors | Cross-origin resource sharing | Generating slugs for posts |
+| nodemon | Auto-restarting the server during development |
 
 ---
 
-## **📊 فهرس واجهات API**
+## **📊 API Endpoints**
 
-### **🔐 التوثيق والمصادقة (Auth)**
-| الطريقة | المسار | الوصف | الصلاحيات |
-|---------|--------|--------|-----------|
-| POST | `/auth/register` | تسجيل مستخدم جديد | عام |
-| POST | `/auth/login` | تسجيل الدخول | عام |
+### **🔐 Authentication (Auth)**
+| Method | Endpoint | Description | Access |
+|--------|----------|--------------|--------|
+| POST | `/auth/register` | Register a new user | Public |
+| POST | `/auth/login` | Log in | Public |
 
-### **📝 إدارة المقالات (Posts)**
-| الطريقة | المسار | الوصف | الصلاحيات |
-|---------|--------|--------|-----------|
-| GET | `/posts` | عرض جميع المقالات | User, Admin |
-| POST | `/posts/add` | إضافة مقال جديد | User |
-| PUT | `/posts/{id}` | تحديث مقال | User |
-| DELETE | `/posts/{id}` | حذف مقال | User |
-
----
-
-## **🔑 نظام الصلاحيات**
-
-### **👥 أدوار المستخدمين**
-1. **المستخدم العادي (User)**
-   - التسجيل والدخول
-   - إنشاء مقالات جديدة
-   - تعديل وحذف مقالاته
-   - عرض المقالات
-
-2. **المسؤول (Admin)**
-   - عرض جميع المقالات
-   - إدارة النظام (حسب التوسعات المستقبلية)
-
-> **ملاحظة:** الصلاحيات يتم التحقق منها عبر `authMiddleware` (للتأكد من صحة التوكن) و `authorizeRoles` (للتحقق من الدور المسموح له بتنفيذ العملية).
+### **📝 Posts Management**
+| Method | Endpoint | Description | Access |
+|--------|----------|--------------|--------|
+| GET | `/posts/` | Get all posts | User, Admin |
+| POST | `/posts/add` | Create a new post | User |
+| PUT | `/posts/{post_id}` | Update a post | User |
+| DELETE | `/posts/{post_id}` | Delete a post | User |
 
 ---
 
-## **⚙️ نماذج البيانات الرئيسية**
+## **🔑 Authorization System**
 
-### **📋 نموذج تسجيل المستخدم**
-```json
-{
-  "name": "اسم المستخدم",
-  "email": "البريد الإلكتروني",
-  "password": "كلمة المرور"
-}
-```
+### **👥 User Roles**
+1. **Regular User (User)**
+   - Register and log in
+   - Create new posts
+   - Update and delete their own posts
+   - View posts
 
-### **🔑 نموذج تسجيل الدخول**
-```json
-{
-  "email": "البريد الإلكتروني",
-  "password": "كلمة المرور"
-}
-```
+2. **Admin**
+   - View all posts
+   - Manage the system (for future extensions)
 
-### **📝 نموذج إنشاء مقال**
-```json
-{
-  "title": "عنوان المقال",
-  "content": "محتوى المقال",
-  "tags": ["tag1", "tag2"]
-}
-```
-
-### **✏️ نموذج تحديث مقال**
-```json
-{
-  "title": "العنوان الجديد (اختياري)",
-  "content": "المحتوى الجديد (اختياري)"
-}
-```
+> **Note:** Permissions are enforced via `authMiddleware` (validates the token) and `authorizeRoles` (checks if the user's role is allowed to perform the action).
 
 ---
 
-## **🔒 نقاط مهمة للأمان**
+---
 
-### **🔑 إدارة التوكنات**
-- يتم إرسال التوكن في الـ Header بالشكل: `Authorization: Bearer <token>`
-- التوكن مطلوب لكل العمليات على المقالات ما عدا `register` و `login`
+## **🔒 Security Notes**
 
-### **👮 التحكم في الصلاحيات**
-- `authMiddleware` يتحقق من وجود وصلاحية التوكن
-- `authorizeRoles` يتحقق من أن دور المستخدم مسموح له بتنفيذ العملية المطلوبة
-- لا يمكن للمستخدم تعديل أو حذف مقالات غير مقالاته (حسب منطق الـ Controller)
+### **🔑 Token Handling**
+- The token must be sent in the header as: `Authorization: Bearer <token>`
+- A valid token is required for all post operations except `register` and `login`
 
-### **🔐 حماية البيانات**
-- استخدام `helmet` لحماية الـ HTTP Headers
-- التحقق من صحة المدخلات عبر `express-validator` قبل الوصول للـ Controller
-- كلمات المرور يجب تشفيرها قبل الحفظ في قاعدة البيانات
+### **👮 Access Control**
+- `authMiddleware` verifies that the token exists and is valid
+- `authorizeRoles` checks whether the user's role is allowed to perform the requested action
+- Users cannot update or delete posts that don't belong to them (enforced in the controller logic)
+
+### **🔐 Data Protection**
+- `helmet` is used to secure HTTP headers
+- Input is validated using `express-validator` before reaching the controller
+- Passwords must be hashed before being stored in the database
 
 ---
 
-## **📁 هيكل المشروع**
-```
-project/
-├── app.js
-├── controllers/
-│   ├── authController.js
-│   └── postController.js
-├── middlewares/
-│   └── authMiddleware.js
-├── routes/
-│   ├── authRoutes.js
-│   └── postRoutes.js
-├── utils/
-│   └── validators/
-│       ├── authValidator.js
-│       └── postValidator.js
-├── .env
-├── package.json
-└── README.md
-```
+## **🚀 Getting Started**
 
----
-
-## **🚀 طريقة التشغيل**
-
-### **1. تثبيت الحزم**
+### **1. Install dependencies**
 ```bash
 npm install
 ```
 
-### **2. إعداد متغيرات البيئة**
-أنشئ ملف `.env` في جذر المشروع وضع فيه:
+### **2. Set up environment variables**
+Create a `.env` file in the project root:
 ```
-PORT=3000
-MONGO_URI=mongodb://localhost:27017/blogging-platform
+PORT=5000
+
+MONGO_URI=mongodb://asamy0879_db_user:ahmed2016@ac-91ppiv3-shard-00-00.kk2mmul.mongodb.net:27017,ac-91ppiv3-shard-00-01.kk2mmul.mongodb.net:27017,ac-91ppiv3-shard-00-02.kk2mmul.mongodb.net:27017/?ssl=true&replicaSet=atlas-137ztp-shard-0&authSource=admin&appName=Cluster0
+
 JWT_SECRET=your_jwt_secret_here
 ```
 
-### **3. تشغيل المشروع في وضع التطوير**
+### **3. Run in development mode**
 ```bash
 npm run dev
 ```
 
 ---
 
-## **🚀 أفضل الممارسات**
+## **🚀 Best Practices**
 
-### **✅ عند التطوير**
-1. استخدم متغيرات البيئة (`.env`) لأي بيانات حساسة
-2. لا تشارك الـ `JWT_SECRET` في الكود مباشرة
-3. تحقق من صحة الـ Response دائماً عند بناء أي feature جديدة
+### **✅ During Development**
+1. Use environment variables (`.env`) for any sensitive data
+2. Never hardcode the `JWT_SECRET` in the codebase
+3. Always validate responses when building new features
 
-### **📊 عند الاختبار**
-1. ابدأ باختبار `/auth/register` و `/auth/login` أولاً
-2. احفظ التوكن الناتج من تسجيل الدخول واستخدمه في باقي الطلبات
-3. اختبر صلاحيات الـ User والـ Admin بشكل منفصل
-
----
-
-## **📞 الدعم والمساعدة**
-
-### **🛠️ استكشاف الأخطاء**
-1. **خطأ 401**: التوكن غير صالح أو غير موجود في الـ Header
-2. **خطأ 403**: الدور الحالي غير مسموح له بهذا الإجراء
-3. **خطأ 404**: المسار غير موجود
-4. **خطأ 422**: بيانات الإدخال غير صحيحة (Validation Error)
+### **📊 During Testing**
+1. Start by testing `/auth/register` and `/auth/login`
+2. Save the token returned from login and use it for subsequent requests
+3. Test User and Admin permissions separately
 
 ---
 
-## **📈 خطط التطوير المستقبلية**
+## **📞 Support & Troubleshooting**
 
-### **🔄 تحسينات قادمة**
-1. **نظام التعليقات** على المقالات
-2. **رفع صور للمقالات** باستخدام `multer`
-3. **نظام البحث والفلترة** بالتاجات والتاريخ
-4. **Pagination** لعرض المقالات
-5. **نظام صلاحيات Admin** أكثر تفصيلاً
+### **🛠️ Common Errors**
+1. **401**: Invalid or missing token
+2. **403**: Current role is not allowed to perform this action
+3. **404**: Endpoint not found
+4. **422**: Invalid input data (validation error)
 
 ---
 
-**✨ تم تطوير Personal Blogging Platform كمنصة Backend بسيطة وآمنة لإدارة المقالات الشخصية، باستخدام Node.js و Express و MongoDB.**
+## **📈 Future Roadmap**
+
+### **🔄 Upcoming Improvements**
+1. **Comments system** on posts
+2. **Image uploads** for posts using `multer`
+3. **Search and filtering** by tags and date
+4. **Pagination** for post listing
+5. **More granular admin permissions**
+
+---
+
+**✨ Personal Blogging Platform is a simple and secure backend platform for managing personal blog posts, built with Node.js, Express, and MongoDB.**
