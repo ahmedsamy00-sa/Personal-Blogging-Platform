@@ -24,6 +24,12 @@ app.use(cors());
 //mount routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", postRoutes);
+app.get('/', (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'API is running'
+    });
+});
 app.all(/.*/, (req, res, nxt)=>{
     nxt(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
 });
